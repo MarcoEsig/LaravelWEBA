@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Http\Request;
 
 class PostController extends Controller{
 
     public function index()
     {
-
         //recupère tous mes posts dans la bdd
         $posts = Post::all();
 
-        //die and dump pour savoir ce qu'il y a dans ma variable posts (donnée de la bdd)
+        //$posts = Post::orderBy('title')->take(3)->get();
+
+        //die and dump pour savoir ce qu'il y a dans ma variable posts (les données de la bdd)
         //dd($posts);
 
         return view('articles',[
@@ -22,23 +24,47 @@ class PostController extends Controller{
 
     public function show($id)
     {
-        $posts = [
-            1=>'Mon titre n°1',
-            2=>'Mon titre n°2'
-        ];
+        //va chercher dans la bdd Post avec la fonction find l'attribut id
+        $post = Post::findOrFail($id);
 
-        $post = $posts[$id] ?? 'pas de titre';
+       //Chercher un texte spécifique de la bdd
+       //$post = Post::where('title','=','Deserunt ipsum expedita quo rem laboriosam rerum.')->firstOrFail();
+       
+       //affichage dans un die and dump
+       //dd($post);
 
         return view('article', [
             'post'=>$post
         ]);
 
     }
+    public function create()
+    {
+        return view('form');
+    }
+    public function store(Request $request)
+    {
+        //Mauvaise façon de faire mais marche
+        /*$post = new Post();
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->save();
+        */
+
+        //Meilleur façon de faire mais on doit créer dans notre model les champs qu'on va remplir
+        Post::create([
+            'title'=> $request->title,
+            'content' => $request->content
+        ]);
+
+        dd('Post créer');
+    }
 
     public function contact()
     {
         return view('contact');
     }
+
 
 
 }

@@ -13,14 +13,10 @@
 
     
     
-    <div class="container mx-auto">
+    <div style="margin-left: 100px;">
         @yield('content')
     </div>
 
-
-
-
-
-    <script src="{{ asset('js/app.js') }}">
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html> 
